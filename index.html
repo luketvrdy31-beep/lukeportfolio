@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Luke Tvrdy — Portfolio</title>
+  <meta name="description" content="Portfolio of Luke Tvrdy — Logos, Redline Photography, Paintings &amp; Woodworking.">
+  <meta name="author" content="Luke Tvrdy">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Minimalist Clean Header -->
+    <header class="site-header">
+      <div>
+        <div class="brand-monogram">
+          <span id="profile-name">Luke Tvrdy</span>
+          <span class="brand-dot"></span>
+        </div>
+        <p class="header-tagline" id="profile-tagline">
+          Logos, Paintings, Woodworking &amp; Redline Photography
+        </p>
+      </div>
+
+      <div class="header-actions">
+        <button class="btn-add-primary" id="open-add-modal-btn">
+          <span>+</span>
+          <span>Add Photo / Piece</span>
+        </button>
+        <button class="btn-utility" id="manage-profile-btn" title="Edit your title or bio">
+          ✏️ Edit Info
+        </button>
+        <button class="btn-utility" id="export-data-btn" title="Download backup of your portfolio">
+          💾 Export
+        </button>
+      </div>
+    </header>
+
+    <main>
+      
+      <!-- Category Filter Bar -->
+      <section style="margin-bottom: 2rem;">
+        <div class="category-filter-bar" id="category-filter-bar">
+          <button class="cat-btn active" data-cat="all">
+            <span>All Works</span>
+            <span class="cat-count" id="count-all">(15)</span>
+          </button>
+          <button class="cat-btn" data-cat="logos">
+            <span>✦ Logos</span>
+            <span class="cat-count" id="count-logos">(6)</span>
+          </button>
+          <button class="cat-btn" data-cat="redline">
+            <span>🏎️ Redline</span>
+            <span class="cat-count" id="count-redline">(2)</span>
+          </button>
+          <button class="cat-btn" data-cat="paintings">
+            <span>🎨 Paintings</span>
+            <span class="cat-count" id="count-paintings">(3)</span>
+          </button>
+          <button class="cat-btn" data-cat="woodworking">
+            <span>🪵 Woodworking</span>
+            <span class="cat-count" id="count-woodworking">(2)</span>
+          </button>
+          <button class="cat-btn" data-cat="projects">
+            <span>💻 Software</span>
+            <span class="cat-count" id="count-projects">(2)</span>
+          </button>
+        </div>
+        <p style="color: var(--text-muted); font-size: 0.85rem;" id="category-desc">
+          Showing all works. Click any category to filter.
+        </p>
+      </section>
+
+      <!-- The Dynamic Gallery Grid -->
+      <section>
+        <div class="gallery-grid" id="gallery-grid">
+          <!-- Populated by js/main.js -->
+        </div>
+
+        <!-- Clean Empty State -->
+        <div class="empty-state-box" id="empty-state" style="display: none;">
+          <div class="empty-state-icon">📸 ✨</div>
+          <h2 class="empty-state-title">Your portfolio is ready for your photos!</h2>
+          <p class="empty-state-desc">
+            Click the button below or drag &amp; drop any image anywhere on this page to add your title, category, and description.
+          </p>
+          <button class="btn-add-primary" id="empty-add-btn" style="padding: 0.85rem 1.8rem; font-size: 0.95rem;">
+            <span>+ Add Your First Photo</span>
+          </button>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div>&copy; 2026 <span id="footer-name">Luke Tvrdy</span>. All rights reserved.</div>
+      <div style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-muted);">Auto-saved locally</div>
+    </footer>
+
+  </div>
+
+  <!-- ==========================================================================
+       Add / Edit Item Modal
+       ========================================================================== -->
+  <div class="modal-backdrop" id="item-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title" id="modal-heading">Add Photo / Piece</h3>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="Close">&times;</button>
+      </div>
+
+      <form id="item-form" class="modal-body">
+        <input type="hidden" id="item-edit-id">
+
+        <!-- Image Upload Area & Preview -->
+        <div class="image-upload-area" id="modal-dropzone">
+          <div class="preview-img-box" id="modal-preview-box">
+            <img src="" alt="Preview" id="modal-preview-img">
+            <div class="crop-trigger-bar">
+              <button type="button" class="btn-crop-adjust" id="open-cropper-btn">
+                <span>✂️</span>
+                <span>Adjust / Manual Crop</span>
+              </button>
+            </div>
+          </div>
+          <div id="dropzone-prompt">
+            <div style="font-size: 2rem; margin-bottom: 0.5rem;">📁 📸</div>
+            <div style="font-weight: 700; font-size: 1rem; margin-bottom: 0.25rem;">Click to select or drag &amp; drop photo here</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Auto-crops naturally, or click "Adjust Crop" to manually frame</div>
+          </div>
+          <input type="file" id="modal-file-input" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Title -->
+        <div class="form-group">
+          <label class="form-label" for="item-title-input">Title / Project Name *</label>
+          <input type="text" id="item-title-input" class="form-input" placeholder="e.g. Monarch Brand Identity" required>
+        </div>
+
+        <!-- Category -->
+        <div class="form-group">
+          <label class="form-label" for="item-cat-select">Category *</label>
+          <select id="item-cat-select" class="form-select">
+            <option value="logos">✦ Logos (Brand Marks &amp; Graphics)</option>
+            <option value="redline">🏎️ Redline (Automotive / Photography)</option>
+            <option value="paintings">🎨 Paintings (Fine Art &amp; Canvas)</option>
+            <option value="woodworking">🪵 Woodworking (Furniture &amp; Craft)</option>
+            <option value="projects">💻 Software &amp; Systems</option>
+          </select>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label class="form-label" for="item-desc-input">Description / Details</label>
+          <textarea id="item-desc-input" class="form-textarea" placeholder="Add details about dimensions, materials, camera settings, or design concept..."></textarea>
+        </div>
+
+        <!-- Specs / Subtitle -->
+        <div class="form-group">
+          <label class="form-label" for="item-specs-input">Specs / Year (Optional)</label>
+          <input type="text" id="item-specs-input" class="form-input" placeholder="e.g. 36x48 Canvas • 2026">
+        </div>
+
+        <div class="modal-footer" style="margin: 0 -1.75rem -1.75rem; padding-top: 1rem;">
+          <button type="button" class="btn-utility" id="modal-cancel-btn">Cancel</button>
+          <button type="submit" class="btn-add-primary" id="modal-save-btn">Save to Portfolio</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Interactive Manual Cropper Modal Studio
+       ========================================================================== -->
+  <div class="modal-backdrop" id="cropper-modal" role="dialog" aria-modal="true" style="z-index: 5000;">
+    <div class="cropper-modal-card">
+      <div class="modal-header">
+        <h3 class="modal-title">✂️ Manual Crop &amp; Framing</h3>
+        <button class="modal-close-btn" id="cropper-close-btn">&times;</button>
+      </div>
+
+      <!-- Cropping Stage Canvas -->
+      <div class="cropper-canvas-stage">
+        <canvas id="cropper-canvas" width="640" height="380"></canvas>
+      </div>
+
+      <!-- Cropper Controls Toolbar -->
+      <div class="cropper-toolbar">
+        <div>
+          <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.35rem;">
+            Aspect Ratio Framing
+          </div>
+          <div class="cropper-ratio-group">
+            <button type="button" class="ratio-btn active" data-ratio="free">Freeform</button>
+            <button type="button" class="ratio-btn" data-ratio="1:1">1:1 Square</button>
+            <button type="button" class="ratio-btn" data-ratio="4:3">4:3 Standard</button>
+            <button type="button" class="ratio-btn" data-ratio="16:9">16:9 Landscape</button>
+            <button type="button" class="ratio-btn" data-ratio="3:4">3:4 Portrait</button>
+          </div>
+        </div>
+
+        <div class="cropper-controls-row">
+          <div class="zoom-slider-box">
+            <span>Zoom:</span>
+            <input type="range" id="crop-zoom-slider" min="1" max="3" step="0.05" value="1">
+          </div>
+
+          <button type="button" class="btn-utility" id="crop-rotate-btn" style="font-size: 0.8rem; padding: 0.4rem 0.85rem;">
+            ⟳ Rotate 90°
+          </button>
+
+          <div style="display: flex; gap: 0.5rem;">
+            <button type="button" class="btn-utility" id="cropper-cancel-btn">Cancel</button>
+            <button type="button" class="btn-add-primary" id="crop-apply-btn" style="padding: 0.5rem 1.25rem;">
+              ✓ Apply Crop
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Edit Profile Modal
+       ========================================================================== -->
+  <div class="modal-backdrop" id="profile-modal" role="dialog" aria-modal="true">
+    <div class="modal-card" style="max-width: 480px;">
+      <div class="modal-header">
+        <h3 class="modal-title">Edit Profile Information</h3>
+        <button class="modal-close-btn" id="profile-modal-close-btn">&times;</button>
+      </div>
+      <form id="profile-form" class="modal-body">
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-name">Your Name</label>
+          <input type="text" id="edit-profile-name" class="form-input" value="Luke Tvrdy" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-tagline">Subtitle / Headline</label>
+          <input type="text" id="edit-profile-tagline" class="form-input" value="Logos, Paintings, Woodworking &amp; Redline Photography">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="edit-profile-email">Email Address</label>
+          <input type="email" id="edit-profile-email" class="form-input" value="luke.tvrdy@example.com">
+        </div>
+        <div class="modal-footer" style="margin: 0 -1.75rem -1.75rem; padding-top: 1rem;">
+          <button type="button" class="btn-utility" id="profile-cancel-btn">Cancel</button>
+          <button type="submit" class="btn-add-primary">Save Info</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       Fullscreen Lightbox Modal
+       ========================================================================== -->
+  <div class="lightbox-modal" id="lightbox-modal" role="dialog" aria-modal="true">
+    <div class="lightbox-content">
+      <button class="lightbox-close-btn" id="lightbox-close-btn" aria-label="Close image">&times;</button>
+      <div class="lightbox-img-box">
+        <img src="" alt="" class="lightbox-img" id="lightbox-img">
+      </div>
+      <div class="lightbox-footer">
+        <div>
+          <span class="gallery-badge" id="lightbox-badge" style="position: static; display: inline-block; margin-bottom: 0.5rem;"></span>
+          <h3 class="lightbox-meta-title" id="lightbox-title"></h3>
+          <p class="lightbox-meta-specs" id="lightbox-specs"></p>
+          <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 0.5rem;" id="lightbox-desc"></p>
+        </div>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <button class="btn-utility" id="lightbox-crop-btn" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">✂️ Re-Crop</button>
+          <button class="btn-utility" id="lightbox-edit-btn" style="font-size: 0.8rem; padding: 0.45rem 0.9rem;">✏️ Edit</button>
+          <button class="btn-utility" id="lightbox-delete-btn" style="font-size: 0.8rem; padding: 0.45rem 0.9rem; color: #dc2626;">🗑️ Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="js/data.js"></script>
+  <script src="js/cropper.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
